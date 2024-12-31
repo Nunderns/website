@@ -14,8 +14,8 @@
             <ul class="flex space-x-4">
                 <li><a href="/" class="hover:text-gray-400">Home</a></li>
                 <li><a href="/manga" class="hover:text-gray-400">Mangás</a></li>
-                <li><a href="/" class="hover:text-gray-400">Sobre</a></li>
-                <li><a href="/" class="hover:text-gray-400">Contato</a></li>
+                <li><a href="/about" class="hover:text-gray-400">Sobre</a></li>
+                <li><a href="/concat" class="hover:text-gray-400">Contato</a></li>
                 @if (Route::has('login'))
                     @auth
                         <li>
@@ -38,7 +38,7 @@
 
     <!-- Mangás Page Content -->
     <section class="container mx-auto py-12 px-6">
-        <h1 class="text-4xl font-bold text-center mb-8">Explorar Mangás</h1>
+        <h1 class="text-4xl font-bold text-center mb-8">Teste de site</h1>
         <p class="text-center mb-12 text-lg text-gray-700">Descubra nossa coleção completa de mangás traduzidos!</p>
 
         <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">

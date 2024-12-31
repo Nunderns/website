@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mangás</title>
+    <title>Sobre</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-gray-100 text-gray-900">
@@ -14,8 +14,8 @@
             <ul class="flex space-x-4">
                 <li><a href="/" class="hover:text-gray-400">Home</a></li>
                 <li><a href="/manga" class="hover:text-gray-400">Mangás</a></li>
-                <li><a href="/" class="hover:text-gray-400">Sobre</a></li>
-                <li><a href="/" class="hover:text-gray-400">Contato</a></li>
+                <li><a href="/about" class="hover:text-gray-400">Sobre</a></li>
+                <li><a href="/concat" class="hover:text-gray-400">Contato</a></li>
                 @if (Route::has('login'))
                     @auth
                         <li>
@@ -36,27 +36,20 @@
         </div>
     </nav>
 
-    <!-- Mangás Page Content -->
+    <!-- About Page Content -->
     <section class="container mx-auto py-12 px-6">
-        <h1 class="text-4xl font-bold text-center mb-8">Explorar Mangás</h1>
-        <p class="text-center mb-12 text-lg text-gray-700">Descubra nossa coleção completa de mangás traduzidos!</p>
+        <h1 class="text-4xl font-bold text-center mb-8">Sobre Nós</h1>
+        <p class="text-center mb-12 text-lg text-gray-700">Saiba mais sobre nossa equipe e nossa missão de traduzir os melhores mangás para você!</p>
 
-        <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
-            <div class="bg-white rounded-lg shadow-md overflow-hidden">
-                <img src="https://source.unsplash.com/400x600/?manga" alt="Manga Cover" class="w-full h-56 object-cover">
-                <div class="p-4">
-                    <h2 class="font-bold text-lg">Mangá 1</h2>
-                    <p class="text-gray-600">Uma breve descrição do mangá.</p>
-                </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div class="bg-white rounded-lg shadow-md p-6">
+                <h2 class="text-2xl font-bold mb-4">Nossa Missão</h2>
+                <p class="text-gray-600">Nos dedicamos a trazer para você os melhores mangás traduzidos, com qualidade e rapidez. Nossa paixão por mangás nos motiva a compartilhar essas histórias incríveis com um público ainda maior.</p>
             </div>
-            <div class="bg-white rounded-lg shadow-md overflow-hidden">
-                <img src="https://source.unsplash.com/400x600/?anime" alt="Manga Cover" class="w-full h-56 object-cover">
-                <div class="p-4">
-                    <h2 class="font-bold text-lg">Mangá 2</h2>
-                    <p class="text-gray-600">Uma breve descrição do mangá.</p>
-                </div>
+            <div class="bg-white rounded-lg shadow-md p-6">
+                <h2 class="text-2xl font-bold mb-4">Nossa Equipe</h2>
+                <p class="text-gray-600">Somos uma equipe de tradutores e entusiastas apaixonados por mangás. Trabalhamos juntos para garantir que você tenha acesso às melhores traduções disponíveis.</p>
             </div>
-            <!-- Adicione mais cards de mangás aqui -->
         </div>
     </section>
 
