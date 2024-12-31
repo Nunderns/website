@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mangás</title>
+    <title>Contato</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-gray-100 text-gray-900">
@@ -14,8 +14,8 @@
             <ul class="flex space-x-4">
                 <li><a href="/" class="hover:text-gray-400">Home</a></li>
                 <li><a href="/manga" class="hover:text-gray-400">Mangás</a></li>
-                <li><a href="/" class="hover:text-gray-400">Sobre</a></li>
-                <li><a href="/" class="hover:text-gray-400">Contato</a></li>
+                <li><a href="/about" class="hover:text-gray-400">Sobre</a></li>
+                <li><a href="/concat" class="hover:text-gray-400">Contato</a></li>
                 @if (Route::has('login'))
                     @auth
                         <li>
@@ -36,28 +36,26 @@
         </div>
     </nav>
 
-    <!-- Mangás Page Content -->
+    <!-- Contact Page Content -->
     <section class="container mx-auto py-12 px-6">
-        <h1 class="text-4xl font-bold text-center mb-8">Explorar Mangás</h1>
-        <p class="text-center mb-12 text-lg text-gray-700">Descubra nossa coleção completa de mangás traduzidos!</p>
+        <h1 class="text-4xl font-bold text-center mb-8">Entre em Contato</h1>
+        <p class="text-center mb-12 text-lg text-gray-700">Envie-nos uma mensagem ou suas perguntas!</p>
 
-        <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
-            <div class="bg-white rounded-lg shadow-md overflow-hidden">
-                <img src="https://source.unsplash.com/400x600/?manga" alt="Manga Cover" class="w-full h-56 object-cover">
-                <div class="p-4">
-                    <h2 class="font-bold text-lg">Mangá 1</h2>
-                    <p class="text-gray-600">Uma breve descrição do mangá.</p>
-                </div>
+        <form action="#" method="POST" class="max-w-3xl mx-auto bg-white p-6 rounded-lg shadow-md">
+            <div class="mb-4">
+                <label for="name" class="block text-gray-700 font-bold">Nome</label>
+                <input type="text" id="name" name="name" class="w-full border-gray-300 rounded-lg shadow-sm focus:ring focus:ring-red-500" required>
             </div>
-            <div class="bg-white rounded-lg shadow-md overflow-hidden">
-                <img src="https://source.unsplash.com/400x600/?anime" alt="Manga Cover" class="w-full h-56 object-cover">
-                <div class="p-4">
-                    <h2 class="font-bold text-lg">Mangá 2</h2>
-                    <p class="text-gray-600">Uma breve descrição do mangá.</p>
-                </div>
+            <div class="mb-4">
+                <label for="email" class="block text-gray-700 font-bold">Email</label>
+                <input type="email" id="email" name="email" class="w-full border-gray-300 rounded-lg shadow-sm focus:ring focus:ring-red-500" required>
             </div>
-            <!-- Adicione mais cards de mangás aqui -->
-        </div>
+            <div class="mb-4">
+                <label for="message" class="block text-gray-700 font-bold">Mensagem</label>
+                <textarea id="message" name="message" rows="5" class="w-full border-gray-300 rounded-lg shadow-sm focus:ring focus:ring-red-500" required></textarea>
+            </div>
+            <button type="submit" class="bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded">Enviar</button>
+        </form>
     </section>
 
     <!-- Footer -->
