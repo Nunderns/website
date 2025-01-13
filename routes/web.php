@@ -7,6 +7,8 @@ use App\Http\Controllers\MangaController;
 use App\Http\Controllers\ChapterController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 // Rota principal
 Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -24,13 +26,23 @@ Route::middleware('auth')->group(function () {
 
     // Rota para o painel de controle do usuário (dashboard)
     Route::get('/dashboard', function () {
-        return view('dashboard');  // Certifique-se de ter a view 'dashboard.blade.php'
+        $user = Auth::user();
+        return view('dashboard', compact('user'));  // Certifique-se de ter a view 'dashboard.blade.php'
     })->name('dashboard');
 
     // Rotas de perfil
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::get('/profile', [ProfileController::class, 'show'])->name('profile.show');
+    Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
+    Route::patch('/password', [ProfileController::class, 'updatePassword'])->name('password.update');
+    // Rota para enviar verificação de email
+    Route::middleware(['auth', 'throttle:6,1'])->post('/email/verification-notification', function (Request $request) {
+        $request->user()->sendEmailVerificationNotification();
+
+        return back()->with('status', 'verification-link-sent');
+    })->name('verification.send');
 
     // Rota para a página inicial autenticada
     Route::get('/home', [HomeController::class, 'index'])->name('home.authenticated');
