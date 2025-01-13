@@ -31,12 +31,17 @@ Route::middleware('auth')->group(function () {
     })->name('dashboard');
 
     // Rotas de perfil
-    Route::get('/profile', [ProfileController::class, 'show'])->name('profile.show');
+    Route::get('/profile', function () {
+        // Substitua por sua lógica real, como um controller para mostrar o perfil do usuário
+        return view('profile');
+    })->name('profile.show');
+
     Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     Route::patch('/password', [ProfileController::class, 'updatePassword'])->name('password.update');
+    
     // Rota para enviar verificação de email
     Route::middleware(['auth', 'throttle:6,1'])->post('/email/verification-notification', function (Request $request) {
         $request->user()->sendEmailVerificationNotification();
