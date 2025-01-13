@@ -32,9 +32,8 @@ Route::middleware('auth')->group(function () {
 
     // Rotas de perfil
     Route::get('/profile', function () {
-        // Substitua por sua lógica real, como um controller para mostrar o perfil do usuário
-        return view('profile');
-    })->name('profile.show');
+        return redirect()->route('profile.edit');
+    })->name('profile');
 
     Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
