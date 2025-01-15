@@ -5,10 +5,11 @@ namespace App\Http\Controllers;
 use App\Models\Manga;
 use Illuminate\Http\Request;
 
-class MangaController extends Controller
+class HomeController extends Controller
 {
     public function index(Request $request)
     {
+        // Lógica de filtro
         $sort = $request->get('sort', 'latest');
 
         switch ($sort) {
@@ -33,7 +34,13 @@ class MangaController extends Controller
                 break;
         }
 
-        return view('mangas.index', compact('mangas'));
+        // Buscar os 8 lançamentos mais recentes
+        $latestMangas = Manga::with('latestChapter')->orderBy('created_at', 'desc')->limit(8)->get();
+
+        // Buscar os 5 mangás mais visualizados
+        $mostViewedMangas = Manga::with('latestChapter')->orderBy('views', 'desc')->limit(5)->get();
+
+        return view('welcome', compact('mangas', 'latestMangas', 'mostViewedMangas'));
     }
 
     public function show(Manga $manga)

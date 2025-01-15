@@ -1,107 +1,48 @@
-<!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="csrf-token" content="{{ csrf_token() }}">
+<!-- filepath: /c:/laragon/www/website/resources/views/welcome.blade.php -->
+@extends('layouts.app')
 
-    <title>{{ config('app.name', 'Remangas') }}</title>
-
-    <!-- Scripts -->
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
-</head>
-<body class="font-sans antialiased">
-    <div class="min-h-screen bg-gray-900">
-        @include('layouts.navigation')
-
-        <!-- Page Content -->
-        <main class="container mx-auto py-8">
-            @yield('content')
-        </main>
-    </div>
-</body>
-</html>
-
-// resources/views/layouts/navigation.blade.php
-<nav class="bg-purple-600 border-b border-purple-700">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex justify-between h-16">
-            <div class="flex">
-                <!-- Logo -->
-                <div class="shrink-0 flex items-center">
-                    <a href="{{ route('home') }}" class="text-white font-bold text-xl">
-                        REMANGAS
-                    </a>
-                </div>
-
-                <!-- Search -->
-                <div class="ml-6 flex items-center flex-1">
-                    <input type="text" 
-                           placeholder="Procurar..." 
-                           class="w-full rounded-md bg-purple-500 px-4 py-2 text-white placeholder-purple-200 focus:outline-none">
-                </div>
-
-                <!-- Navigation Links -->
-                <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                    <a href="{{ route('home') }}" 
-                       class="inline-flex items-center px-1 pt-1 text-white">
-                        HOME
-                    </a>
-                    <a href="{{ route('discord') }}" 
-                       class="inline-flex items-center px-1 pt-1 text-white">
-                        DISCORD
-                    </a>
-                    <a href="{{ route('donations') }}" 
-                       class="inline-flex items-center px-1 pt-1 text-white">
-                        DOAÇÕES
-                    </a>
-                    <a href="{{ route('solutions') }}" 
-                       class="inline-flex items-center px-1 pt-1 text-white">
-                        SOLUÇÕES
-                    </a>
-                    <a href="{{ route('mangas.index') }}" 
-                       class="inline-flex items-center px-1 pt-1 text-white">
-                        MANGÁS
-                    </a>
-                    <a href="{{ route('contact') }}" 
-                       class="inline-flex items-center px-1 pt-1 text-white">
-                        CONTATO
-                    </a>
-                </div>
-            </div>
-
-            <!-- Auth Links -->
-            <div class="hidden sm:flex sm:items-center sm:ml-6">
-                @auth
-                    <div class="ml-3 relative">
-                        <x-dropdown align="right" width="48">
-                            <x-slot name="trigger">
-                                <button class="flex items-center text-white hover:text-gray-200">
-                                    <div>{{ Auth::user()->name }}</div>
-                                </button>
-                            </x-slot>
-
-                            <x-slot name="content">
-                            <x-dropdown-link :href="route('profile.edit')">
-                                {{ __('Profile') }}
-                            </x-dropdown-link>
-                                <!-- Authentication -->
-                                <form method="POST" action="{{ route('logout') }}">
-                                    @csrf
-                                    <x-dropdown-link :href="route('logout')"
-                                            onclick="event.preventDefault();
-                                                        this.closest('form').submit();">
-                                        {{ __('Log Out') }}
-                                    </x-dropdown-link>
-                                </form>
-                            </x-slot>
-                        </x-dropdown>
+@section('content')
+<div class="container mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex justify-between items-start mt-6">
+        <!-- Lançamentos -->
+        <div class="w-2/3">
+            <h1 class="text-3xl font-bold text-white">Lançamentos</h1>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
+                @foreach ($latestMangas as $manga)
+                    <div class="bg-purple-500 p-4 rounded-lg">
+                        <h2 class="text-white font-bold">{{ $manga->title }}</h2>
+                        <p class="text-white">Nota: {{ $manga->approval_rating }}</p>
+                        @if ($manga->latestChapter)
+                            <p class="text-white">Capítulo: {{ $manga->latestChapter->number }}</p>
+                            <p class="text-white">Postado: {{ $manga->latestChapter->created_at->diffForHumans() }}</p>
+                        @else
+                            <p class="text-white">Capítulo: N/A</p>
+                            <p class="text-white">Postado: N/A</p>
+                        @endif
                     </div>
-                @else
-                    <a href="{{ route('login') }}" class="text-white px-4 py-2">Entre</a>
-                    <a href="{{ route('register') }}" class="text-white px-4 py-2">Crie conta</a>
-                @endauth
+                @endforeach
+            </div>
+        </div>
+
+        <!-- Mais lidos -->
+        <div class="w-1/3 ml-6">
+            <h1 class="text-3xl font-bold text-white">Mais lidos</h1>
+            <div class="mt-6">
+                @foreach ($mostViewedMangas as $manga)
+                    <div class="bg-purple-500 p-4 rounded-lg mb-4">
+                        <h2 class="text-white font-bold">{{ $manga->title }}</h2>
+                        <p class="text-white">Nota: {{ $manga->approval_rating }}</p>
+                        @if ($manga->latestChapter)
+                            <p class="text-white">Capítulo: {{ $manga->latestChapter->number }}</p>
+                            <p class="text-white">Postado: {{ $manga->latestChapter->created_at->diffForHumans() }}</p>
+                        @else
+                            <p class="text-white">Capítulo: N/A</p>
+                            <p class="text-white">Postado: N/A</p>
+                        @endif
+                    </div>
+                @endforeach
             </div>
         </div>
     </div>
-</nav>
+</div>
+@endsection
