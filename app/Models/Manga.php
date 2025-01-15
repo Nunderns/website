@@ -16,8 +16,14 @@ class Manga extends Model
         return $this->hasMany(Chapter::class);
     }
 
-    public function getLatestChapterAttribute()
+    public function latestChapter()
     {
-        return $this->chapters()->latest()->first()->number ?? 'N/A';
+        return $this->hasOne(Chapter::class)->latestOfMany();
+    }
+
+    // Optionally define a scope for latest mangas
+    public function scopeLatestMangas($query)
+    {
+        return $query->orderBy('views', 'desc')->limit(8);
     }
 }

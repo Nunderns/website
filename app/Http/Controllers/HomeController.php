@@ -7,19 +7,18 @@ use Illuminate\Http\Request;
 
 class HomeController extends Controller
 {
-    // Método index para exibir a página inicial
     public function index()
     {
-        $latestReleases = Manga::with('chapters')
+        $latestMangas = Manga::with('latestChapter')
             ->latest()
             ->take(8)
             ->get();
             
-        $mostRead = Manga::with('chapters')
+        $mostViewedMangas = Manga::with('latestChapter')
             ->orderBy('views', 'desc')
             ->take(5)
             ->get();
             
-        return view('welcome', compact('latestReleases', 'mostRead'));
+        return view('welcome', compact('latestMangas', 'mostViewedMangas'));
     }
 }
