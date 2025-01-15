@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -9,9 +8,11 @@ class Manga extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['title', 'description', 'image_url', 'approval_rating', 'trend_score', 'views'];
+    protected $fillable = [
+        'title', 'description', 'author', 'artist', 'approval_rating', 'status', 'image_url', 'buy_link'
+    ];
 
-    // Relacionamento de um manga com vários capítulos
+    // Relacionamento com capítulos
     public function chapters()
     {
         return $this->hasMany(Chapter::class);
@@ -23,9 +24,9 @@ class Manga extends Model
         return $this->hasOne(Chapter::class)->latest();
     }
 
-    // Escopo para pegar os mangas mais recentes
-    public function scopeLatestMangas($query)
+    // Relacionamento com categorias
+    public function categories()
     {
-        return $query->orderBy('created_at', 'desc')->limit(8);
+        return $this->belongsToMany(Category::class);
     }
 }
