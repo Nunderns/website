@@ -1,7 +1,10 @@
 <?php
+
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\MangaController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\Auth\RegisteredUserController;
+use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\ChapterController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
