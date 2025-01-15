@@ -1,11 +1,10 @@
 <?php
-
 namespace App\Http\Controllers;
 
 use App\Models\Manga;
 use Illuminate\Http\Request;
 
-class HomeController extends Controller
+class MangaController extends Controller
 {
     public function index(Request $request)
     {
@@ -28,24 +27,17 @@ class HomeController extends Controller
             case 'new':
                 $mangas = Manga::orderBy('created_at', 'desc')->paginate(20);
                 break;
-            case 'latest':
             default:
-                $mangas = Manga::with('chapters')->orderBy('updated_at', 'desc')->paginate(20);
+                $mangas = Manga::orderBy('created_at', 'desc')->paginate(20);
                 break;
         }
 
-        // Buscar os 8 lançamentos mais recentes
-        $latestMangas = Manga::with('latestChapter')->orderBy('created_at', 'desc')->limit(8)->get();
-
-        // Buscar os 5 mangás mais visualizados
-        $mostViewedMangas = Manga::with('latestChapter')->orderBy('views', 'desc')->limit(5)->get();
-
-        return view('welcome', compact('mangas', 'latestMangas', 'mostViewedMangas'));
+        return view('mangas.index', compact('mangas'));
     }
 
     public function show(Manga $manga)
     {
-        $manga->load('chapters');
+        $manga->load('chapters', 'categories');
         return view('mangas.show', compact('manga'));
     }
 }
