@@ -24,6 +24,11 @@ class Manga extends Model
     // Optionally define a scope for latest mangas
     public function scopeLatestMangas($query)
     {
-        return $query->orderBy('views', 'desc')->limit(8);
+        return $query->orderBy('created_at', 'desc')->limit(8);
+    }
+
+    public function getLatestChapterAttribute()
+    {
+        return $this->chapters()->latest()->first()->number ?? 'N/A';
     }
 }
