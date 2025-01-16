@@ -5,7 +5,6 @@ use App\Http\Controllers\MangaController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
-use App\Http\Controllers\ChapterController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -59,7 +58,4 @@ Route::view('/contato', 'pages.contact')->name('contact');
 // Rotas para mangás
 Route::get('/mangas', [MangaController::class, 'index'])->name('mangas.index');
 Route::get('/mangas/{manga}', [MangaController::class, 'show'])->name('mangas.show');
-
-// Rotas para capítulos
-Route::get('/mangas/{manga}/chapters/create', [ChapterController::class, 'create'])->name('chapters.create');
-Route::post('/mangas/{manga}/chapters', [ChapterController::class, 'store'])->name('chapters.store');
+Route::get('/mangas/{manga}/capitulo/{chapter}', [ChapterController::class, 'show'])->name('chapters.show');
