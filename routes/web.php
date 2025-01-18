@@ -55,6 +55,8 @@ Route::view('/doacoes', 'pages.donations')->name('donations');
 Route::view('/solucoes', 'pages.solutions')->name('solutions');
 Route::view('/contato', 'pages.contact')->name('contact');
 
+Route::post('/solucoes/submit', [SolutionController::class, 'submit'])->name('solutions.submit');
+
 // Rotas para mangás
 Route::get('/mangas', [MangaController::class, 'index'])->name('mangas.index');
 Route::get('/mangas/{manga}', [MangaController::class, 'show'])->name('mangas.show');
