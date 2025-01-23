@@ -16,6 +16,25 @@
         </div>
         <p class="text-white mt-2">Total de Mangás: {{ $mangas->total() }}</p>
 
+        @if(auth()->user() && auth()->user()->role == 'admin')
+            <div class="mt-4">
+                <!-- Botão para abrir o formulário -->
+                <button onclick="toggleForm()" class="bg-blue-500 text-white px-4 py-2 rounded">Adicionar Mangá</button>
+
+                <!-- Formulário para adicionar mangá -->
+                <div id="addMangaForm" class="mt-4 hidden">
+                    <form action="{{ route('mangas.store') }}" method="POST">
+                        @csrf
+                        <div class="mb-4">
+                            <label for="title" class="block text-white font-bold mb-2">Nome do Mangá:</label>
+                            <input type="text" id="title" name="title" class="w-full px-3 py-2 border rounded-lg" placeholder="Digite o nome do mangá" required>
+                        </div>
+                        <button type="submit" class="bg-green-500 text-white px-4 py-2 rounded">Salvar</button>
+                    </form>
+                </div>
+            </div>
+        @endif
+
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
             @foreach ($mangas as $manga)
                 <div class="bg-purple-500 p-4 rounded-lg">
@@ -31,4 +50,11 @@
             {{ $mangas->links() }}
         </div>
     </div>
+
+    <script>
+        function toggleForm() {
+            const form = document.getElementById('addMangaForm');
+            form.classList.toggle('hidden');
+        }
+    </script>
 @endsection
