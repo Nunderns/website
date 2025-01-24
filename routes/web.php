@@ -4,7 +4,6 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\MangaController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ChapterController;
-
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use Illuminate\Support\Facades\Route;
@@ -25,29 +24,28 @@ Route::middleware('guest')->group(function () {
 Route::middleware('auth')->group(function () {
     Route::post('logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');
 
-    // Rota para o painel de controle do usuário (dashboard)
+    // Painel de controle do usuário (dashboard)
     Route::get('/dashboard', function () {
         $user = Auth::user();
         return view('dashboard', compact('user'));
     })->name('dashboard');
 
     // Rotas de perfil
-    Route::get('/profile', [ProfileController::class, 'show'])->name('profile.show');
-    Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    Route::prefix('profile')->name('profile.')->group(function () {
+        Route::get('/', [ProfileController::class, 'show'])->name('show');
+        Route::get('/edit', [ProfileController::class, 'edit'])->name('edit');
+        Route::patch('/', [ProfileController::class, 'update'])->name('update');
+        Route::delete('/', [ProfileController::class, 'destroy'])->name('destroy');
+        Route::patch('/password', [ProfileController::class, 'updatePassword'])->name('password.update');
+    });
 
-    // Rota para atualizar a senha
-    Route::patch('/password', [ProfileController::class, 'updatePassword'])->name('password.update');
-
-    // Rota para enviar verificação de email
-    Route::middleware(['auth', 'throttle:6,1'])->post('/email/verification-notification', function (Request $request) {
+    // Enviar verificação de email
+    Route::post('/email/verification-notification', function (Request $request) {
         $request->user()->sendEmailVerificationNotification();
-
         return back()->with('status', 'verification-link-sent');
-    })->name('verification.send');
+    })->middleware('throttle:6,1')->name('verification.send');
 
-    // Rota para a página inicial autenticada
+    // Página inicial autenticada
     Route::get('/home', [HomeController::class, 'index'])->name('home.authenticated');
 });
 
@@ -56,24 +54,20 @@ Route::view('/discord', 'pages.discord')->name('discord');
 Route::view('/doacoes', 'pages.donations')->name('donations');
 Route::view('/solucoes', 'pages.solutions')->name('solutions');
 Route::view('/contato', 'pages.contact')->name('contact');
-
 Route::post('/solucoes/submit', [SolutionController::class, 'submit'])->name('solutions.submit');
 
 // Rotas para mangás
-Route::get('/mangas', [MangaController::class, 'index'])->name('mangas.index');
-Route::get('/mangas/{manga}', [MangaController::class, 'show'])->name('mangas.show');
-Route::post('/mangas', [MangaController::class, 'store'])->name('mangas.store');
-Route::get('/chapters/create', [ChapterController::class, 'create'])->name('chapters.create');
+Route::resource('mangas', MangaController::class)->except(['destroy']);
+Route::prefix('mangas/{manga}')->group(function () {
+    Route::post('/rate', [MangaController::class, 'rate'])->name('mangas.rate');
+    Route::post('/report', [MangaController::class, 'report'])->name('mangas.report');
+});
 
-Route::get('/mangas/{manga}/chapters/create', [ChapterController::class, 'create'])->name('chapters.create');
-Route::post('/mangas/{manga}/chapters', [ChapterController::class, 'store'])->name('chapters.store');
-
-Route::post('/mangas/{manga}/rate', [MangaController::class, 'rate'])->name('mangas.rate');
-Route::post('/mangas/{manga}/report', [MangaController::class, 'report'])->name('mangas.report');
-
-
-Route::get('mangas/{manga}/edit', [MangaController::class, 'edit'])->name('mangas.edit');
-Route::put('mangas/{manga}', [MangaController::class, 'update'])->name('mangas.update');
-Route::get('mangas/{manga}/chapters/{chapter}/edit', [ChapterController::class, 'edit'])->name('chapters.edit');
-Route::put('mangas/{manga}/chapters/{chapter}', [ChapterController::class, 'update'])->name('chapters.update');
-Route::delete('mangas/{manga}/chapters/{chapter}', [ChapterController::class, 'destroy'])->name('chapters.destroy');
+// Rotas para capítulos
+Route::prefix('mangas/{manga}/chapters')->name('chapters.')->group(function () {
+    Route::get('/create', [ChapterController::class, 'create'])->name('create');
+    Route::post('/', [ChapterController::class, 'store'])->name('store');
+    Route::get('/{chapter}/edit', [ChapterController::class, 'edit'])->name('edit');
+    Route::put('/{chapter}', [ChapterController::class, 'update'])->name('update');
+    Route::delete('/{chapter}', [ChapterController::class, 'destroy'])->name('destroy');
+});

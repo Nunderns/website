@@ -50,7 +50,17 @@ class MangaController extends Controller
         // Validação dos dados enviados
         $request->validate([
             'title' => 'required|string|max:255',
+            'description' => 'required|string',
+            'author' => 'required|string|max:255',
+            'artist' => 'required|string|max:255',
+            'category' => 'required|string|max:255',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
+
+        if ($request->hasFile('image')) {
+            $imagePath = $request->file('image')->store('mangas', 'public');
+            $validated['image_url'] = '/storage/' . $imagePath;
+        }
 
         // Criar um novo mangá no banco de dados
         Manga::create([
@@ -107,4 +117,10 @@ class MangaController extends Controller
         // Redirecionar para a lista de mangás com uma mensagem de sucesso
         return redirect()->route('mangas.index')->with('success', 'Mangá excluído com sucesso!');
     }
+
+    public function create()
+    {
+        return view('mangas.create');
+    }
+
 }
