@@ -6,7 +6,7 @@
                 <!-- Logo -->
                 <div class="shrink-0 flex items-center">
                     <a href="{{ route('home') }}" class="text-white font-bold text-xl">
-                        REMANGAS
+                        Genova Translations
                     </a>
                 </div>
 
