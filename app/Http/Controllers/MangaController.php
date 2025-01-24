@@ -72,4 +72,39 @@ class MangaController extends Controller
 
         return response()->json(['success' => true]);
     }
+
+    public function edit(Manga $manga)
+    {
+        return view('mangas.edit', compact('manga'));
+    }
+
+    // Atualizar os dados de um mangá
+    public function update(Request $request, Manga $manga)
+    {
+        // Validação dos dados enviados
+        $request->validate([
+            'title' => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'author' => 'nullable|string|max:255',
+            'artist' => 'nullable|string|max:255',
+            'status' => 'nullable|string|in:completed,ongoing',
+            'approval_rating' => 'nullable|numeric|min:0|max:5',
+        ]);
+
+        // Atualizar os dados do mangá
+        $manga->update($request->all());
+
+        // Redirecionar com uma mensagem de sucesso
+        return redirect()->route('mangas.show', $manga->id)->with('success', 'Mangá atualizado com sucesso!');
+    }
+
+    // Excluir um mangá
+    public function destroy(Manga $manga)
+    {
+        // Excluir o mangá do banco de dados
+        $manga->delete();
+
+        // Redirecionar para a lista de mangás com uma mensagem de sucesso
+        return redirect()->route('mangas.index')->with('success', 'Mangá excluído com sucesso!');
+    }
 }

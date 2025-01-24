@@ -24,6 +24,7 @@
                 </p>
 
                 @if (Auth::check() && Auth::user()->isAdmin())
+                    <a href="{{ route('mangas.edit', $manga->id) }}" class="mt-4 inline-block bg-green-500 text-white px-4 py-2 rounded-md">Editar Mangá</a>
                     <a href="{{ route('chapters.create', $manga->id) }}" class="mt-4 inline-block bg-blue-500 text-white px-4 py-2 rounded-md">Publicar Capítulo</a>
                 @endif
 
@@ -53,6 +54,14 @@
                         <h3 class="text-white font-bold">{{ $chapter->title }}</h3>
                         <p class="text-white">Número: {{ $chapter->number }}</p>
                         <p class="text-white">Publicado em: {{ $chapter->created_at->format('d/m/Y') }}</p>
+                        @if (Auth::check() && Auth::user()->isAdmin())
+                            <a href="{{ route('chapters.edit', [$manga->id, $chapter->id]) }}" class="mt-4 inline-block bg-yellow-500 text-white px-4 py-2 rounded-md">Editar</a>
+                            <form action="{{ route('chapters.destroy', [$manga->id, $chapter->id]) }}" method="POST" class="inline-block mt-2">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="bg-red-500 text-white px-4 py-2 rounded-md" onclick="return confirm('Tem certeza que deseja excluir este capítulo?')">Excluir</button>
+                            </form>
+                        @endif
                     </div>
                 @endforeach
             </div>

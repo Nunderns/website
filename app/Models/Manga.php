@@ -15,6 +15,8 @@ class Manga extends Model
         'image_url',
         'buy_link',
         'rating',
+        'author',
+        'artist',
     ];
 
     // Relacionamento com capítulos
