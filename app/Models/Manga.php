@@ -9,7 +9,14 @@ class Manga extends Model
     use HasFactory;
 
     protected $fillable = [
-        'title', 'description', 'author', 'artist', 'approval_rating', 'status', 'image_url', 'buy_link'
+        'title',
+        'description',
+        'status',
+        'image_url',
+        'buy_link',
+        'rating',
+        'author',
+        'artist',
     ];
 
     // Relacionamento com capítulos
@@ -28,5 +35,11 @@ class Manga extends Model
     public function categories()
     {
         return $this->belongsToMany(Category::class);
+    }
+
+    // Relacionamento com avaliações
+    public function ratings()
+    {
+        return $this->hasMany(Rating::class);
     }
 }

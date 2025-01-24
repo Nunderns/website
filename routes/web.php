@@ -3,6 +3,8 @@
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\MangaController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ChapterController;
+
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use Illuminate\Support\Facades\Route;
@@ -55,7 +57,23 @@ Route::view('/doacoes', 'pages.donations')->name('donations');
 Route::view('/solucoes', 'pages.solutions')->name('solutions');
 Route::view('/contato', 'pages.contact')->name('contact');
 
+Route::post('/solucoes/submit', [SolutionController::class, 'submit'])->name('solutions.submit');
+
 // Rotas para mangás
 Route::get('/mangas', [MangaController::class, 'index'])->name('mangas.index');
 Route::get('/mangas/{manga}', [MangaController::class, 'show'])->name('mangas.show');
-Route::get('/mangas/{manga}/capitulo/{chapter}', [ChapterController::class, 'show'])->name('chapters.show');
+Route::post('/mangas', [MangaController::class, 'store'])->name('mangas.store');
+Route::get('/chapters/create', [ChapterController::class, 'create'])->name('chapters.create');
+
+Route::get('/mangas/{manga}/chapters/create', [ChapterController::class, 'create'])->name('chapters.create');
+Route::post('/mangas/{manga}/chapters', [ChapterController::class, 'store'])->name('chapters.store');
+
+Route::post('/mangas/{manga}/rate', [MangaController::class, 'rate'])->name('mangas.rate');
+Route::post('/mangas/{manga}/report', [MangaController::class, 'report'])->name('mangas.report');
+
+
+Route::get('mangas/{manga}/edit', [MangaController::class, 'edit'])->name('mangas.edit');
+Route::put('mangas/{manga}', [MangaController::class, 'update'])->name('mangas.update');
+Route::get('mangas/{manga}/chapters/{chapter}/edit', [ChapterController::class, 'edit'])->name('chapters.edit');
+Route::put('mangas/{manga}/chapters/{chapter}', [ChapterController::class, 'update'])->name('chapters.update');
+Route::delete('mangas/{manga}/chapters/{chapter}', [ChapterController::class, 'destroy'])->name('chapters.destroy');

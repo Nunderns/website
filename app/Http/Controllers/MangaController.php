@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Controllers;
 
 use App\Models\Manga;
@@ -6,6 +7,7 @@ use Illuminate\Http\Request;
 
 class MangaController extends Controller
 {
+    // Exibir todos os mangás com filtros de ordenação
     public function index(Request $request)
     {
         // Lógica de filtro
@@ -35,9 +37,74 @@ class MangaController extends Controller
         return view('mangas.index', compact('mangas'));
     }
 
+    // Exibir detalhes de um mangá específico
     public function show(Manga $manga)
     {
         $manga->load('chapters', 'categories');
         return view('mangas.show', compact('manga'));
+    }
+
+    // Adicionar um novo mangá ao banco de dados
+    public function store(Request $request)
+    {
+        // Validação dos dados enviados
+        $request->validate([
+            'title' => 'required|string|max:255',
+        ]);
+
+        // Criar um novo mangá no banco de dados
+        Manga::create([
+            'title' => $request->title,
+            'latest_chapter' => '', // Inicialmente vazio, caso precise ser atualizado
+        ]);
+
+        // Redirecionar de volta para a lista com uma mensagem de sucesso
+        return redirect()->route('mangas.index')->with('success', 'Mangá adicionado com sucesso!');
+    }
+
+    public function rate(Request $request, $id)
+    {
+        $manga = Manga::findOrFail($id);
+        $user = auth()->user();
+
+        // Atualiza a avaliação do mangá
+        $manga->update(['rating' => $request->rating]);
+
+        return response()->json(['success' => true]);
+    }
+
+    public function edit(Manga $manga)
+    {
+        return view('mangas.edit', compact('manga'));
+    }
+
+    // Atualizar os dados de um mangá
+    public function update(Request $request, Manga $manga)
+    {
+        // Validação dos dados enviados
+        $request->validate([
+            'title' => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'author' => 'nullable|string|max:255',
+            'artist' => 'nullable|string|max:255',
+            'status' => 'nullable|string|in:completed,ongoing',
+            'approval_rating' => 'nullable|numeric|min:0|max:5',
+        ]);
+
+        // Atualizar os dados do mangá
+        $manga->update($request->all());
+
+        // Redirecionar com uma mensagem de sucesso
+        return redirect()->route('mangas.show', $manga->id)->with('success', 'Mangá atualizado com sucesso!');
+    }
+
+    // Excluir um mangá
+    public function destroy(Manga $manga)
+    {
+        // Excluir o mangá do banco de dados
+        $manga->delete();
+
+        // Redirecionar para a lista de mangás com uma mensagem de sucesso
+        return redirect()->route('mangas.index')->with('success', 'Mangá excluído com sucesso!');
     }
 }
