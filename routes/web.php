@@ -72,3 +72,8 @@ Route::post('/mangas/{manga}/rate', [MangaController::class, 'rate'])->name('man
 Route::post('/mangas/{manga}/report', [MangaController::class, 'report'])->name('mangas.report');
 
 
+Route::get('mangas/{manga}/edit', [MangaController::class, 'edit'])->name('mangas.edit');
+Route::put('mangas/{manga}', [MangaController::class, 'update'])->name('mangas.update');
+Route::get('mangas/{manga}/chapters/{chapter}/edit', [ChapterController::class, 'edit'])->name('chapters.edit');
+Route::put('mangas/{manga}/chapters/{chapter}', [ChapterController::class, 'update'])->name('chapters.update');
+Route::delete('mangas/{manga}/chapters/{chapter}', [ChapterController::class, 'destroy'])->name('chapters.destroy');
