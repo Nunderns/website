@@ -24,28 +24,29 @@ Route::middleware('guest')->group(function () {
 Route::middleware('auth')->group(function () {
     Route::post('logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');
 
-    // Painel de controle do usuário (dashboard)
+    // Rota para o painel de controle do usuário (dashboard)
     Route::get('/dashboard', function () {
         $user = Auth::user();
         return view('dashboard', compact('user'));
     })->name('dashboard');
 
     // Rotas de perfil
-    Route::prefix('profile')->name('profile.')->group(function () {
-        Route::get('/', [ProfileController::class, 'show'])->name('show');
-        Route::get('/edit', [ProfileController::class, 'edit'])->name('edit');
-        Route::patch('/', [ProfileController::class, 'update'])->name('update');
-        Route::delete('/', [ProfileController::class, 'destroy'])->name('destroy');
-        Route::patch('/password', [ProfileController::class, 'updatePassword'])->name('password.update');
-    });
+    Route::get('/profile', [ProfileController::class, 'show'])->name('profile.show');
+    Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
-    // Enviar verificação de email
-    Route::post('/email/verification-notification', function (Request $request) {
+    // Rota para atualizar a senha
+    Route::patch('/password', [ProfileController::class, 'updatePassword'])->name('password.update');
+
+    // Rota para enviar verificação de email
+    Route::middleware(['auth', 'throttle:6,1'])->post('/email/verification-notification', function (Request $request) {
         $request->user()->sendEmailVerificationNotification();
-        return back()->with('status', 'verification-link-sent');
-    })->middleware('throttle:6,1')->name('verification.send');
 
-    // Página inicial autenticada
+        return back()->with('status', 'verification-link-sent');
+    })->name('verification.send');
+
+    // Rota para a página inicial autenticada
     Route::get('/home', [HomeController::class, 'index'])->name('home.authenticated');
 });
 
