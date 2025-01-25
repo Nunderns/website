@@ -1,4 +1,3 @@
-<!-- filepath: /c:/laragon/www/website/resources/views/welcome.blade.php -->
 @extends('layouts.app')
 
 @section('content')
@@ -10,6 +9,12 @@
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
                 @foreach ($latestMangas as $manga)
                 <div class="bg-purple-500 p-4 rounded-lg">
+                    <div class="mb-4">
+                        <img 
+                            src="{{ $manga->cover_image ? asset('storage/' . $manga->cover_image) : asset('images/default-cover.jpg') }}" 
+                            alt="Capa de {{ $manga->title }}" 
+                            class="w-full h-48 object-cover rounded-lg">
+                    </div>
                     <h2 class="text-white font-bold">
                         <a href="{{ route('mangas.show', $manga->id) }}">{{ $manga->title }}</a>
                     </h2>
@@ -32,6 +37,12 @@
             <div class="mt-6">
                 @foreach ($mostViewedMangas as $manga)
                     <div class="bg-purple-500 p-4 rounded-lg mb-4">
+                        <div class="mb-4">
+                            <img 
+                                src="{{ $manga->cover_image ? asset('storage/' . $manga->cover_image) : asset('images/default-cover.jpg') }}" 
+                                alt="Capa de {{ $manga->title }}" 
+                                class="w-full h-48 object-cover rounded-lg">
+                        </div>
                         <h2 class="text-white font-bold">
                             <a href="{{ route('mangas.show', $manga->id) }}">{{ $manga->title }}</a>
                         </h2>

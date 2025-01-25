@@ -63,6 +63,7 @@ Route::prefix('mangas/{manga}')->group(function () {
     Route::post('/rate', [MangaController::class, 'rate'])->name('mangas.rate');
     Route::post('/report', [MangaController::class, 'report'])->name('mangas.report');
 });
+Route::get('/mangas/{manga}/chapters/{chapter}/read', [ChapterController::class, 'read'])->name('chapters.read');
 
 // Rotas para capítulos
 Route::prefix('mangas/{manga}/chapters')->name('chapters.')->group(function () {
