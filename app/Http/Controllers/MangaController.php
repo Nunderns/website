@@ -48,7 +48,7 @@ class MangaController extends Controller
     public function store(Request $request)
     {
         // Validação dos dados enviados
-        $request->validate([
+        $validated = $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'required|string',
             'author' => 'required|string|max:255',
@@ -56,21 +56,26 @@ class MangaController extends Controller
             'category' => 'required|string|max:255',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
-
+    
+        // Manipulação do upload de imagem
+        $imagePath = null;
         if ($request->hasFile('image')) {
             $imagePath = $request->file('image')->store('mangas', 'public');
-            $validated['image_url'] = '/storage/' . $imagePath;
         }
-
+    
         // Criar um novo mangá no banco de dados
-        Manga::create([
-            'title' => $request->title,
-            'latest_chapter' => '', // Inicialmente vazio, caso precise ser atualizado
+        $manga = Manga::create([
+            'title' => $validated['title'],
+            'description' => $validated['description'],
+            'author' => $validated['author'],
+            'artist' => $validated['artist'],
+            'image' => $imagePath,
         ]);
-
-        // Redirecionar de volta para a lista com uma mensagem de sucesso
+    
+        // Redirecionar com mensagem de sucesso
         return redirect()->route('mangas.index')->with('success', 'Mangá adicionado com sucesso!');
     }
+    
 
     public function rate(Request $request, $id)
     {
