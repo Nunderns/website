@@ -43,15 +43,40 @@ class ChapterController extends Controller
     
 
     public function create(Manga $manga)
+    {
+        return view('chapters.create', compact('manga'));
+    }
+
+
+        public function read($mangaId, $chapterId)
+    {
+        $chapter = Chapter::with('images')->findOrFail($chapterId);
+
+        return view('chapters.read', compact('chapter'));
+    }
+
+    public function edit(Manga $manga, Chapter $chapter)
+    {
+        return view('chapters.edit', compact('manga', 'chapter'));
+    }
+
+    public function update(Request $request, Manga $manga, Chapter $chapter)
 {
-    return view('chapters.create', compact('manga'));
+    // Validação dos dados
+    $validated = $request->validate([
+        'title' => 'required|string|max:255',
+        'number' => 'required|integer|min:1|unique:chapters,number,' . $chapter->id . ',id,manga_id,' . $manga->id,
+    ]);
+
+    // Atualizar o capítulo
+    $chapter->update([
+        'title' => $validated['title'],
+        'number' => $validated['number'],
+    ]);
+
+    return redirect()->route('mangas.show', $manga->id)->with('success', 'Capítulo atualizado com sucesso!');
 }
 
 
-    public function read($mangaId, $chapterId)
-{
-    $chapter = Chapter::with('images')->findOrFail($chapterId);
 
-    return view('chapters.read', compact('chapter'));
-}
 }

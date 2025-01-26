@@ -9,15 +9,7 @@ class ChapterImage extends Model
 {
     use HasFactory;
 
-    /**
-     * Atributos permitidos para atribuição em massa.
-     *
-     * @var array
-     */
-    protected $fillable = [
-        'path',       // Caminho da imagem
-        'chapter_id', // ID do capítulo associado
-    ];
+    protected $fillable = ['chapter_id', 'path'];
 
     /**
      * Relacionamento com o modelo Chapter.
