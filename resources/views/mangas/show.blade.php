@@ -54,6 +54,7 @@
                         <h3 class="text-white font-bold">{{ $chapter->title }}</h3>
                         <p class="text-white">Número: {{ $chapter->number }}</p>
                         <p class="text-white">Publicado em: {{ $chapter->created_at->format('d/m/Y') }}</p>
+                        <a href="{{ route('chapters.read', [$manga->id, $chapter->id]) }}" class="mt-4 inline-block bg-blue-500 text-white px-4 py-2 rounded-md">Ler Capítulo</a>
                         @if (Auth::check() && Auth::user()->isAdmin())
                             <a href="{{ route('chapters.edit', [$manga->id, $chapter->id]) }}" class="mt-4 inline-block bg-yellow-500 text-white px-4 py-2 rounded-md">Editar</a>
                             <form action="{{ route('chapters.destroy', [$manga->id, $chapter->id]) }}" method="POST" class="inline-block mt-2">
@@ -80,8 +81,8 @@
                 <option value="">Selecione o motivo</option>
                 <option value="incorrect_or_missing_volume">Incorreto ou faltando número do volume</option>
                 <option value="info_needs_fixing">Informação precisa corrigir</option>
-                <option value="missing_cover_art">Missing cover art</option>
-                <option value="troll_entry">Troll entry</option>
+                <option value="missing_cover_art">Capa faltando</option>
+                <option value="troll_entry">Entrada troll</option>
                 <option value="vandalism">Vandalismo</option>
                 <option value="other">Outros</option>
             </select>

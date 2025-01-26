@@ -4,7 +4,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\MangaController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ChapterController;
-
+use App\Http\Controllers\ImageController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use Illuminate\Support\Facades\Route;
@@ -56,24 +56,27 @@ Route::view('/discord', 'pages.discord')->name('discord');
 Route::view('/doacoes', 'pages.donations')->name('donations');
 Route::view('/solucoes', 'pages.solutions')->name('solutions');
 Route::view('/contato', 'pages.contact')->name('contact');
-
 Route::post('/solucoes/submit', [SolutionController::class, 'submit'])->name('solutions.submit');
 
 // Rotas para mangás
-Route::get('/mangas', [MangaController::class, 'index'])->name('mangas.index');
-Route::get('/mangas/{manga}', [MangaController::class, 'show'])->name('mangas.show');
-Route::post('/mangas', [MangaController::class, 'store'])->name('mangas.store');
-Route::get('/chapters/create', [ChapterController::class, 'create'])->name('chapters.create');
+Route::get('/search', [MangaController::class, 'search'])->name('manga.search');
+Route::get('/search-results', [MangaController::class, 'searchResults'])->name('manga.search.results');
+Route::resource('mangas', MangaController::class)->except(['destroy']);
+Route::prefix('mangas/{manga}')->group(function () {
+    Route::post('/rate', [MangaController::class, 'rate'])->name('mangas.rate');
+    Route::post('/report', [MangaController::class, 'report'])->name('mangas.report');
+});
 
-Route::get('/mangas/{manga}/chapters/create', [ChapterController::class, 'create'])->name('chapters.create');
-Route::post('/mangas/{manga}/chapters', [ChapterController::class, 'store'])->name('chapters.store');
+// Rotas para capítulos
+Route::prefix('mangas/{manga}/chapters')->name('chapters.')->group(function () {
+    Route::get('/create', [ChapterController::class, 'create'])->name('create');
+    Route::post('/', [ChapterController::class, 'store'])->name('store');
+    Route::get('/{chapter}/read', [ChapterController::class, 'read'])->name('read');
+    Route::get('/{chapter}/edit', [ChapterController::class, 'edit'])->name('edit');
+    Route::put('/{chapter}', [ChapterController::class, 'update'])->name('update');
+    Route::delete('/{chapter}', [ChapterController::class, 'destroy'])->name('destroy');
+});
 
-Route::post('/mangas/{manga}/rate', [MangaController::class, 'rate'])->name('mangas.rate');
-Route::post('/mangas/{manga}/report', [MangaController::class, 'report'])->name('mangas.report');
-
-
-Route::get('mangas/{manga}/edit', [MangaController::class, 'edit'])->name('mangas.edit');
-Route::put('mangas/{manga}', [MangaController::class, 'update'])->name('mangas.update');
-Route::get('mangas/{manga}/chapters/{chapter}/edit', [ChapterController::class, 'edit'])->name('chapters.edit');
-Route::put('mangas/{manga}/chapters/{chapter}', [ChapterController::class, 'update'])->name('chapters.update');
-Route::delete('mangas/{manga}/chapters/{chapter}', [ChapterController::class, 'destroy'])->name('chapters.destroy');
+// Rotas para imagens
+Route::post('/chapters/{chapter}/images/upload', [ImageController::class, 'upload'])->name('images.upload');
+Route::delete('/images/{image}', [ImageController::class, 'destroy'])->name('images.destroy');
