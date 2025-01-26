@@ -143,4 +143,13 @@ class MangaController extends Controller
 
         return response()->json(['success' => true]);
     }
+
+    public function searchResults(Request $request)
+    {
+        $query = $request->get('query');
+        $mangas = Manga::where('title', 'LIKE', "%{$query}%")->paginate(10);
+
+        return view('mangas.search-results', compact('mangas', 'query'));
+    }
+
 }
