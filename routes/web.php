@@ -4,6 +4,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\MangaController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ChapterController;
+use App\Http\Controllers\ImageController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use Illuminate\Support\Facades\Route;
@@ -63,13 +64,17 @@ Route::prefix('mangas/{manga}')->group(function () {
     Route::post('/rate', [MangaController::class, 'rate'])->name('mangas.rate');
     Route::post('/report', [MangaController::class, 'report'])->name('mangas.report');
 });
-Route::get('/mangas/{manga}/chapters/{chapter}/read', [ChapterController::class, 'read'])->name('chapters.read');
 
 // Rotas para capítulos
 Route::prefix('mangas/{manga}/chapters')->name('chapters.')->group(function () {
     Route::get('/create', [ChapterController::class, 'create'])->name('create');
     Route::post('/', [ChapterController::class, 'store'])->name('store');
+    Route::get('/{chapter}/read', [ChapterController::class, 'read'])->name('read');
     Route::get('/{chapter}/edit', [ChapterController::class, 'edit'])->name('edit');
     Route::put('/{chapter}', [ChapterController::class, 'update'])->name('update');
     Route::delete('/{chapter}', [ChapterController::class, 'destroy'])->name('destroy');
 });
+
+// Rotas para imagens
+Route::post('/chapters/{chapter}/images/upload', [ImageController::class, 'upload'])->name('images.upload');
+Route::delete('/images/{image}', [ImageController::class, 'destroy'])->name('images.destroy');
