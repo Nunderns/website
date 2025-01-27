@@ -59,6 +59,8 @@ Route::view('/contato', 'pages.contact')->name('contact');
 Route::post('/solucoes/submit', [SolutionController::class, 'submit'])->name('solutions.submit');
 
 // Rotas para mangás
+Route::get('/search', [MangaController::class, 'search'])->name('manga.search');
+Route::get('/search-results', [MangaController::class, 'searchResults'])->name('manga.search.results');
 Route::resource('mangas', MangaController::class)->except(['destroy']);
 Route::prefix('mangas/{manga}')->group(function () {
     Route::post('/rate', [MangaController::class, 'rate'])->name('mangas.rate');
